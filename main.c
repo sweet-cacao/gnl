@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "header.h"
-/*
-int 	readlinewidth(int fd)
+
+char 	read_byte(int fd)
 {
 	char	buff[2];
 	size_t	nbread;
@@ -9,15 +9,28 @@ int 	readlinewidth(int fd)
 	(void) memset((void *)buff, 0, (size_t)2);
 	nbread = read(fd, (void *) buff, (size_t) 2);
 	if (nbread == -1 || nbread == 0)
-		return (-1);
+		return (NULL);
 	buff[1] = '\0';
-	return (atoi(buff));
+	return (buff[0]);
 }
-*/
-void	readandprintlines(int fd, size_t linewidth)
+
+int     ft_linelen(int fd)
+{
+        int linelen;
+
+        linelen = 0;
+        while (readbyte(fd) != '\n' || readbyte(fd) != NULL)
+        {
+                linelen++;
+        }
+        return (linelen);
+
+}
+
+void	readandprintline(int fd, size_t linelen)
 {
 	char	*buff;
-	size_t	nbread;
+	static size_t	nbread;
 	buff = (char *)malloc((linewidth + 1) * sizeof(*buff));
 	if (buff == NULL)
 		return ;
@@ -31,9 +44,13 @@ void	readandprintlines(int fd, size_t linewidth)
 	return  ;
 }
 
-void get_next_line(int fd, char **line)
+void	get_next_line(int fd, char **line)
 {
-	while 
+	size_t linelen;
+
+	linelen = ft_linelen(fd);
+	readandprintline(fd, linelen);
+
 }
 
 int main()
@@ -44,7 +61,7 @@ int main()
 	fd = open("./file.txt", O_RDONLY);
 	if (fd == -1)
 		return (-1);
-	linewidth = 1;
+	linewidth = BUFF_SIZE;
 	if (linewidth == -1 || linewidth == 0)
 		return (-1);
 	readandprintlines(fd, (size_t) linewidth);
