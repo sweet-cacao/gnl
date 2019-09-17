@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include "header.h"
-
 char 	read_byte(int fd)
 {
 	char	buff[2];
