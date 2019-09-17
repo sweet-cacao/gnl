@@ -5,6 +5,6 @@
 # include <stdlib.h>
 # include <string.h>
 # include <fcntl.h>
-# define BUFF_SIZE 10
+# define BUFF_SIZE 1
 # include <stdio.h>
 #endif
