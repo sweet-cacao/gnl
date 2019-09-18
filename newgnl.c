@@ -6,7 +6,7 @@
 /*   By: gstarvin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 14:14:55 by gstarvin          #+#    #+#             */
-/*   Updated: 2019/09/17 21:39:49 by gstarvin         ###   ########.fr       */
+/*   Updated: 2019/09/18 11:20:20 by gstarvin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,29 +16,35 @@
 static char *s = NULL;
 
 int		is_endl()
-{	
+{
+	int b = 0;	
 	int i = 0;
+	if (s[i] == '\0')
+		return (-1);
+	while (s[i] == '\n')
+	{
+		i++;
+		b++;
+	}
+	s += b;
+	i = 0;
+	printf ("b = %d\n", b);
 	while (s[i] != '\0')
 	{
 		if (s[i] == '\n')
-		{
-			while (s[i] == '\n')
-			{
-				b++;
-				i++;
-			}
-			i = i - b;
 			return (i);
-		}
 		i++;
 	}
-	return (-1);
+	i--;
+	return (i);
 }
+
+
 
 int	get_next_line(int fd, char **line)
 {
 	char *buff;
-	int nbread;
+	int nbread = 0;
 	char *tmp;
 	int end;
 
@@ -63,12 +69,17 @@ int	get_next_line(int fd, char **line)
 	if (nbread == -1)
 		return (-1);
 	end = is_endl();
-	if (end > 0)
+	printf ("is_endl = %d\n", end);
+	printf ("nbread = %d\n", end);
+	if (end >= 0)
 	{
 		ft_memmove(*line, s, end);
 		s += end + 1;
+//		printf ("the rest of s = %s", s);
 		return (1);
 	}
+	if (end == -1)
+		return (-1);
 	return (0);
 }
 
