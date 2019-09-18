@@ -6,5 +6,4 @@
 # include <string.h>
 # include <fcntl.h>
 # define BUFF_SIZE 32
-# include <stdio.h>
 #endif

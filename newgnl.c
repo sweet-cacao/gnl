@@ -6,7 +6,7 @@
 /*   By: gstarvin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 14:14:55 by gstarvin          #+#    #+#             */
-/*   Updated: 2019/09/18 15:11:04 by gstarvin         ###   ########.fr       */
+/*   Updated: 2019/09/18 15:44:00 by gstarvin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,9 @@ int		get_next_line(int fd, char **line)
 		return (1);
 	}
 	if (end == -1)
+	{
 		return (-1);
+	}
 	return (0);
 }
 
