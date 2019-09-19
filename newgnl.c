@@ -6,13 +6,13 @@
 /*   By: gstarvin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 14:14:55 by gstarvin          #+#    #+#             */
-/*   Updated: 2019/09/18 15:44:00 by gstarvin         ###   ########.fr       */
+/*   Updated: 2019/09/19 18:38:39 by gstarvin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 #include "libft/libft.h"
-
+#include <stdio.h>
 //static char *s = NULL;
 
 int		is_endl(char *s)
@@ -38,30 +38,32 @@ int		is_endl(char *s)
 			return (i);
 		i++;
 	}
-	i--;
 	return (i);
 }
 
 int		read_doc(int fd, char **s)
 {
-	char *buff;
+	char buff[BUFF_SIZE + 1];
 	int nbread;
 	char *tmp;
 	
 	nbread = 0;
-	buff = (char *)malloc(sizeof(*buff) * BUFF_SIZE + 1);
-	(void) memset((void *)buff, 0, (size_t)BUFF_SIZE + 1);
-	*s = (char *)malloc(sizeof(*buff) * BUFF_SIZE + 1);
-	while  ((nbread = read(fd, (void *)buff, BUFF_SIZE)) > 0)
+//	buff = (char *)malloc(sizeof(*buff) * BUFF_SIZE + 1);
+	*s = ft_strnew(BUFF_SIZE);
+//	*s = (char *)malloc(sizeof(*buff) * BUFF_SIZE + 1);
+	while  ((nbread = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[nbread] = '\0';
 		tmp = ft_strjoin(*s, buff);
-		free (*s);
+		ft_strdel(&*s);
+		*s = ft_strdup(tmp);
+		ft_strdel(&tmp);
+/*		free (*s);
 		*s = (char *)malloc(sizeof(tmp));
 		*s = tmp;
-		(void) memset((void *)buff, 0, BUFF_SIZE);
+*/
 	}
-	free(buff);
+//	free(buff);
 	if (nbread == -1)
 		return (-1);
 	return (0);
@@ -74,7 +76,7 @@ int		get_next_line(int fd, char **line)
 	int nbread;
 	char *tmp;
 */	int end;
-	
+	int len = 0;	
 	end = 0;
 /*	nbread = 0;	
 	buff = (char *)malloc(sizeof(*buff) * BUFF_SIZE + 1);
@@ -96,8 +98,13 @@ int		get_next_line(int fd, char **line)
 	if (nbread == -1)
 		return (-1);
 	
-*/	if (!s)
+*/	if (fd < 0)
+		return (-1);
+	if (!s)
+	{
 		read_doc(fd, &s);
+		
+	}	
 	while (*s == '\n')
 		s++;
 	end = is_endl(s);
@@ -125,7 +132,7 @@ int		main()
 	char *line;
 //	line = malloc(1000);
 //	(void) memset((void *)line, 0, (size_t)1000);
-	fd = open("./file.txt", O_RDONLY);
+	fd = open("file.txt", O_RDONLY);
 	while (get_next_line(fd, &line) > 0)
 	{
 		printf("OUTPUT = %s\n", line);

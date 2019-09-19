@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gnl.c                                              :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gstarvin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/17 14:14:55 by gstarvin          #+#    #+#             */
-/*   Updated: 2019/09/19 16:49:16 by gstarvin         ###   ########.fr       */
+/*   Created: 2019/09/19 17:01:34 by gstarvin          #+#    #+#             */
+/*   Updated: 2019/09/19 18:02:12 by gstarvin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,11 @@
 
 int		is_endl(char *s)
 {
-	int b = 0;	
-	int i = 0;
+	int b;
+	int i;
+
+	i = 0;
+	b = 0;
 	if (s[i] == '\0')
 		return (-1);
 	while (s[i] == '\n')
@@ -36,24 +39,27 @@ int		is_endl(char *s)
 
 int		read_doc(int fd, char **s)
 {
-	char *buff;
-	int nbread;
-	char *tmp;
-	
+	char	buff[BUFF_SIZE + 1];
+	int		nbread;
+	char	*tmp;
+
 	nbread = 0;
-	buff = (char *)malloc(sizeof(*buff) * BUFF_SIZE + 1);
-	(void) memset((void *)buff, 0, (size_t)BUFF_SIZE + 1);
-	*s = (char *)malloc(sizeof(*buff) * BUFF_SIZE + 1);
-	while  ((nbread = read(fd, (void *)buff, BUFF_SIZE)) > 0)
+//	buff = (char *)malloc(sizeof(*buff) * BUFF_SIZE + 1);
+	*s = ft_strnew(BUFF_SIZE);
+//	*s = (char *)malloc(sizeof(*buff) * BUFF_SIZE + 1);
+	while ((nbread = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[nbread] = '\0';
 		tmp = ft_strjoin(*s, buff);
-		free (*s);
+		ft_strdel(&*s);
+		*s = ft_strdup(tmp);
+		ft_strdel(&tmp);
+		/*
+		free(s);
 		*s = (char *)malloc(sizeof(tmp));
-		*s = tmp;
-		(void) memset((void *)buff, 0, BUFF_SIZE);
+		*s = tmp;*/
 	}
-	free(buff);
+//	free(buff);
 	if (nbread == -1)
 		return (-1);
 	return (0);
@@ -62,8 +68,8 @@ int		read_doc(int fd, char **s)
 int		get_next_line(int fd, char **line)
 {
 	static char *s;
-	int end;
-	
+	int			end;
+
 	end = 0;
 	if (!s)
 		read_doc(fd, &s);
