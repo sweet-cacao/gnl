@@ -11,7 +11,7 @@ when the reading has been completed, or if an error has happened respectively.
 In your project #include "get_next_line.h"
 
 Compile libft.a :
-Go to folder libft
+Go to folder libft\n
 make
 
 Compile with get_next_line.c and libft.a 
